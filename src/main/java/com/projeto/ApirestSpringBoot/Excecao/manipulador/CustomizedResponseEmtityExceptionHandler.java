@@ -1,7 +1,7 @@
 package com.projeto.ApirestSpringBoot.Excecao.manipulador;
 
 import com.projeto.ApirestSpringBoot.Excecao.ExceptionResponse;
-import com.projeto.ApirestSpringBoot.Excecao.UnsupportedMathOperationException;
+import com.projeto.ApirestSpringBoot.Excecao.ResourceNotFoundException;
 import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +25,12 @@ public class CustomizedResponseEmtityExceptionHandler extends ResponseEntityExce
     }
 
     
-    @ExceptionHandler(UnsupportedMathOperationException.class)
-    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request) {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 
     }
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 @RestController
 @RequestMapping("/pessoa")
 public class PessoaControle {
@@ -28,7 +29,7 @@ public class PessoaControle {
     
     
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Pessoa findById(@PathVariable(value = "id") String id) {
+    public Pessoa findById(@PathVariable(value = "id") Long id) {
 
         return pessoaServico.findById(id);
 
@@ -70,7 +71,7 @@ public class PessoaControle {
     
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> delete(@PathVariable(value = "id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
 
         pessoaServico.delete(id);
 

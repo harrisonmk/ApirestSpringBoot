@@ -1,10 +1,12 @@
 package com.projeto.ApirestSpringBoot.servicos;
 
+import com.projeto.ApirestSpringBoot.Excecao.ResourceNotFoundException;
 import com.projeto.ApirestSpringBoot.modelo.Pessoa;
-import java.util.ArrayList;
+import com.projeto.ApirestSpringBoot.repositorio.PessoaRepositorio;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,20 +17,15 @@ public class PessoaServico {
     private static final AtomicLong contador = new AtomicLong();
     private Logger logger = Logger.getLogger(PessoaServico.class.getName());
 
+    @Autowired
+    PessoaRepositorio pessoaRepositorio;
     
-    
-    public Pessoa findById(String id) {
+    public Pessoa findById(Long id) {
 
         logger.info("Encontrar uma pessoa!");
 
-        Pessoa pessoa = new Pessoa();
-        pessoa.setId(contador.incrementAndGet());
-        pessoa.setPrimeiroNome("Leandro");
-        pessoa.setUltimoNome("costa");
-        pessoa.setEndereco("Uberlandia - minas gerais - Brasil");
-        pessoa.setGenero("Masculino");
 
-        return pessoa;
+        return pessoaRepositorio.findById(id).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
     }
 
     
@@ -37,16 +34,9 @@ public class PessoaServico {
 
         logger.info("encontrando todas as pessoas!");
 
-        List<Pessoa> pessoas = new ArrayList<>();
+ 
 
-        for (int i = 0; i < 8; i++) {
-
-            Pessoa pessoa = mockPessoa(i);
-            pessoas.add(pessoa);
-
-        }
-
-        return pessoas;
+        return pessoaRepositorio.findAll();
     }
 
     
@@ -54,7 +44,7 @@ public class PessoaServico {
 
         logger.info("criando uma pessoa!");
 
-        return pessoa;
+        return pessoaRepositorio.save(pessoa);
     }
     
     
@@ -62,20 +52,33 @@ public class PessoaServico {
     public Pessoa update(Pessoa pessoa) {
 
         logger.info("atualizando uma pessoa!");
+        
+       Pessoa entidade = pessoaRepositorio.findById(pessoa.getId()).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
 
-        return pessoa;
+       
+         
+        entidade.setPrimeiroNome(pessoa.getPrimeiroNome());
+        entidade.setUltimoNome(pessoa.getUltimoNome());
+        entidade.setEndereco(pessoa.getEndereco());
+        entidade.setGenero(pessoa.getGenero());
+       
+        return pessoaRepositorio.save(entidade);
     }
 
     
     
-    public void delete(String id) {
+    public void delete(Long id) {
 
         logger.info("apagando uma pessoa!");
+        
+        Pessoa entidade = pessoaRepositorio.findById(id).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
+        
+        pessoaRepositorio.delete(entidade);
 
     }
 
     
-    
+    /*
     private Pessoa mockPessoa(int i) {
 
         Pessoa pessoa = new Pessoa();
@@ -87,7 +90,7 @@ public class PessoaServico {
 
         return pessoa;
     }
-    
+    */
     
     
 

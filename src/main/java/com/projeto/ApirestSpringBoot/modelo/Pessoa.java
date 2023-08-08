@@ -1,19 +1,36 @@
 
 package com.projeto.ApirestSpringBoot.modelo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
-
+@Entity
+@Table(name = "pessoa")
 public class Pessoa implements Serializable {
     
     
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(name = "primeiro_nome", nullable=false, length= 80) //nao pode ser nulo
     private String primeiroNome;
+    
+    @Column(name = "ultimo_nome",nullable=false, length= 80)
     private String ultimoNome;
+    
+    @Column(nullable=false, length= 100)
     private String endereco;
+    
+    @Column(nullable=false, length= 9)
     private String genero;
 
     
