@@ -1,6 +1,10 @@
 package com.projeto.ApirestSpringBoot.servicos;
 
 import com.projeto.ApirestSpringBoot.Excecao.ResourceNotFoundException;
+import com.projeto.ApirestSpringBoot.data.vo.v1.PessoaVO;
+import com.projeto.ApirestSpringBoot.data.vo.v2.PessoaVOV2;
+import com.projeto.ApirestSpringBoot.mapper.DozerMapper;
+import com.projeto.ApirestSpringBoot.mapper.customizado.PessoaMapper;
 import com.projeto.ApirestSpringBoot.modelo.Pessoa;
 import com.projeto.ApirestSpringBoot.repositorio.PessoaRepositorio;
 import java.util.List;
@@ -12,57 +16,78 @@ import org.springframework.stereotype.Service;
 @Service
 public class PessoaServico {
 
-    
-    
     private static final AtomicLong contador = new AtomicLong();
     private Logger logger = Logger.getLogger(PessoaServico.class.getName());
 
+    
     @Autowired
     PessoaRepositorio pessoaRepositorio;
     
-    public Pessoa findById(Long id) {
+    @Autowired
+    PessoaMapper pessoaMapper;
+
+    
+    
+    public PessoaVO findById(Long id) {
 
         logger.info("Encontrar uma pessoa!");
 
+        var entidade = pessoaRepositorio.findById(id).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
 
-        return pessoaRepositorio.findById(id).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
+        return DozerMapper.parseObject(entidade, PessoaVO.class);
     }
 
     
     
-    public List<Pessoa> findAll() {
+    public List<PessoaVO> findAll() {
 
         logger.info("encontrando todas as pessoas!");
 
- 
-
-        return pessoaRepositorio.findAll();
+        return DozerMapper.parseListObjects(pessoaRepositorio.findAll(), PessoaVO.class);
     }
 
     
-    public Pessoa create(Pessoa pessoa) {
+    
+    public PessoaVO create(PessoaVO pessoaVo) {
 
         logger.info("criando uma pessoa!");
 
-        return pessoaRepositorio.save(pessoa);
-    }
-    
-    
+        var entidade = DozerMapper.parseObject(pessoaVo, Pessoa.class);
 
-    public Pessoa update(Pessoa pessoa) {
+        var vo = DozerMapper.parseObject(pessoaRepositorio.save(entidade), PessoaVO.class);
+
+        return vo;
+    }
+
+    
+    
+    public PessoaVOV2 createV2(PessoaVOV2 pessoaVo) {
+
+        logger.info("criando uma pessoa!");
+
+        var entidade = pessoaMapper.converteVoParaEntidade(pessoaVo);
+
+        var vo = pessoaMapper.converteEntidadeParaVo(pessoaRepositorio.save(entidade));
+
+        return vo;
+    }
+
+    
+    
+    public PessoaVO update(PessoaVO pessoa) {
 
         logger.info("atualizando uma pessoa!");
-        
-       Pessoa entidade = pessoaRepositorio.findById(pessoa.getId()).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
 
-       
-         
+        Pessoa entidade = pessoaRepositorio.findById(pessoa.getId()).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
+
         entidade.setPrimeiroNome(pessoa.getPrimeiroNome());
         entidade.setUltimoNome(pessoa.getUltimoNome());
         entidade.setEndereco(pessoa.getEndereco());
         entidade.setGenero(pessoa.getGenero());
-       
-        return pessoaRepositorio.save(entidade);
+
+        var vo = DozerMapper.parseObject(pessoaRepositorio.save(entidade), PessoaVO.class);
+
+        return vo;
     }
 
     
@@ -70,14 +95,13 @@ public class PessoaServico {
     public void delete(Long id) {
 
         logger.info("apagando uma pessoa!");
-        
+
         Pessoa entidade = pessoaRepositorio.findById(id).orElseThrow(() -> new ResourceNotFoundException("nenhum registro encontrado para Id"));
-        
+
         pessoaRepositorio.delete(entidade);
 
     }
 
-    
     /*
     private Pessoa mockPessoa(int i) {
 
@@ -90,8 +114,5 @@ public class PessoaServico {
 
         return pessoa;
     }
-    */
-    
-    
-
+     */
 }
