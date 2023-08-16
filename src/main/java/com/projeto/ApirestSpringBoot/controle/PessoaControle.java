@@ -2,7 +2,6 @@ package com.projeto.ApirestSpringBoot.controle;
 
 import com.projeto.ApirestSpringBoot.data.vo.v1.PessoaVO;
 import com.projeto.ApirestSpringBoot.data.vo.v2.PessoaVOV2;
-import com.projeto.ApirestSpringBoot.modelo.Pessoa;
 import com.projeto.ApirestSpringBoot.servicos.PessoaServico;
 import java.net.URI;
 import java.util.List;
@@ -21,7 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 @RestController
-@RequestMapping("/pessoa")
+@RequestMapping("api/pessoa/v1")
 public class PessoaControle {
 
     @Autowired
