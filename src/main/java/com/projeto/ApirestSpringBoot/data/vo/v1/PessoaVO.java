@@ -1,18 +1,22 @@
 package com.projeto.ApirestSpringBoot.data.vo.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.util.Objects;
 
 
-
+@JsonPropertyOrder({"id","primeiroNome","ultimoNome","endereco","genero"}) //diz a posicao dos elementos no json
 public class PessoaVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
+    @JsonProperty("primeiro_nome")
     private String primeiroNome;
 
+    @JsonProperty("ultimo_nome")
     private String ultimoNome;
 
     private String endereco;

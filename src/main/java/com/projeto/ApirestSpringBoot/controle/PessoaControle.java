@@ -3,10 +3,10 @@ package com.projeto.ApirestSpringBoot.controle;
 import com.projeto.ApirestSpringBoot.data.vo.v1.PessoaVO;
 import com.projeto.ApirestSpringBoot.data.vo.v2.PessoaVOV2;
 import com.projeto.ApirestSpringBoot.servicos.PessoaServico;
+import com.projeto.ApirestSpringBoot.util.MediaType;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ public class PessoaControle {
 
     
     
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public PessoaVO findById(@PathVariable(value = "id") Long id) {
 
         return pessoaServico.findById(id);
@@ -38,7 +38,7 @@ public class PessoaControle {
 
     
     
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces ={ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public ResponseEntity<List<PessoaVO>> findAll() {
 
         List<PessoaVO> lista = pessoaServico.findAll();
@@ -49,7 +49,7 @@ public class PessoaControle {
 
     
     
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML}, produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public ResponseEntity<PessoaVO> create(@RequestBody PessoaVO pessoa) {
 
         pessoa = pessoaServico.create(pessoa);
@@ -60,7 +60,7 @@ public class PessoaControle {
     }
     
     
-    @PostMapping(value = "/v2",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v2",consumes = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML}, produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public ResponseEntity<PessoaVOV2> createV2(@RequestBody PessoaVOV2 pessoa) {
 
         pessoa = pessoaServico.createV2(pessoa);
@@ -72,7 +72,7 @@ public class PessoaControle {
     
     
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML}, produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public PessoaVO update(@RequestBody PessoaVO pessoa) {
 
         return pessoaServico.update(pessoa);
@@ -82,7 +82,7 @@ public class PessoaControle {
     
     
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YML})
     public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
 
         pessoaServico.delete(id);
